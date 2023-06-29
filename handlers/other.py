@@ -1,9 +1,22 @@
-# F:\Python\TGBOT\handlers\other.py
+# F:\Python\TGBOT\Pizza-training-bot\handlers\other.py
 
 import json, string
 
-
 from aiogram import types, Dispatcher
+
+import os
+
+# Получить путь к текущему файлу
+current_file_path = os.path.realpath(__file__)
+
+# Получить директорию текущего файла
+current_dir = os.path.dirname(current_file_path)
+
+# Перейти на уровень вверх
+parent_dir = os.path.dirname(current_dir)
+
+# Создать абсолютный путь к файлу
+file_path = os.path.join(parent_dir, 'cenz.json')
 
 
 # @dp.message_handler()  # отлавливает когда кто-то что-то пишет
@@ -18,7 +31,7 @@ from aiogram import types, Dispatcher
 async def echo_cenz_filter(message: types.message):  # функция фильтра от мата
     user_words = {i.lower().translate(str.maketrans("", "", string.punctuation))
                   for i in message.text.split(" ") if len(i) > 1}
-    censored_words = set(json.load(open("cenz.json")))
+    censored_words = set(json.load(open(file_path)))
 
     if user_words.intersection(censored_words):
         await message.reply("Маты запрещены!")

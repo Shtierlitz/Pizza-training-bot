@@ -13,7 +13,7 @@ async def on_startup(_):  # функция настроек старта бот�
 
 
 client.register_handlers_client(dp)  # регистрация хендлеров
-admin.register_hendlers_admin(dp)
+admin.register_handlers_admin(dp)
 other.register_handlers_other(dp)  # хендлеры без команд нужно импортировать последними
 
 
