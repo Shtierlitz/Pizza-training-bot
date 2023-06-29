@@ -23,7 +23,6 @@ async def make_changes_command(message: types.Message):
     global ID
     ID = message.from_user.id
     await bot.send_message(message.from_user.id, "Что хозяин надо???")  # , reply_markup=button_case_admin)
-    await message.reply(ID)
     await message.delete()
 
 
@@ -33,6 +32,18 @@ async def cm_start(message: types.Message):
     if message.from_user.id == ID:
         await FSMAdmin.photo.set()
         await message.reply("Загрузить фото")
+
+
+# Выход из состояния
+# @dp.message_handler(state="*", commands=['отмена'])
+# @dp.message_handler(Text(equals='отмена', ignore_case=True), state="*")
+async def cancel_handler(message: types.Message, state: FSMContext):
+    if message.from_user.id == ID:
+        current_state = await state.get_state()
+        if current_state is None:
+            return
+        await state.finish()
+        await message.reply("OK")
 
 
 # Ловим первый ответ и пишем в словарь
@@ -79,25 +90,14 @@ async def load_price(message: types.Message, state: FSMContext):
         await state.finish()
 
 
-# Выход из состояния
-# @dp.message_handler(state="*", commands=['отмена'])
-# @dp.message_handler(Text(equals='отмена', ignore_case=True), state="*")
-async def cancel_handler(message: types.Message, state: FSMContext):
-    if message.from_user.id == ID:
-        current_state = await state.get_state()
-        if current_state is None:
-            return
-        await state.finish()
-        await message.reply("OK")
-
-
 # Регистрируем хендлеры
 def register_handlers_admin(dp: Dispatcher):
     dp.register_message_handler(cm_start, commands=['Загрузить'], state=None)
+    dp.register_message_handler(cancel_handler, Text(equals='отмена', ignore_case=True), state="*")
+    dp.register_message_handler(make_changes_command, commands=['moderator'], is_chat_admin=True)
     dp.register_message_handler(load_photo, content_types=types.ContentType.PHOTO, state=FSMAdmin.photo)
     dp.register_message_handler(load_name, content_types=types.ContentType.TEXT, state=FSMAdmin.name)
     dp.register_message_handler(load_description, content_types=types.ContentType.TEXT, state=FSMAdmin.description)
     dp.register_message_handler(load_price, content_types=types.ContentType.TEXT, state=FSMAdmin.price)
     dp.register_message_handler(cancel_handler, state="*", commands="отмена")
-    dp.register_message_handler(cancel_handler, Text(equals='отмена', ignore_case=True), state="*")
-    dp.register_message_handler(make_changes_command, commands=['moderator'], is_chat_admin=True)
+

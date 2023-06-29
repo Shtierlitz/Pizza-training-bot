@@ -1,5 +1,7 @@
-# F:\Python\TGBOT\handlers\client.py
+# F:\Python\TGBOT\Pizza-training-bot\handlers\client.py
 
+
+from create_bot import dp
 from keyboards import kb_client  # импорт клавиатуры
 from aiogram.types import ReplyKeyboardRemove
 from aiogram import types, Dispatcher
@@ -31,13 +33,21 @@ async def pur_zayka(message: types.Message):
     await message.reply("Мур мур зайка! 😘")
 
 
+# Хендлер для отлавливания конкретного слова
+# @dp.message_handler(lambda message: "Такси" in message.text)
+async def taxi(message: types.Message):
+    await message.answer("Такси")
+
+
 # @dp.message_handler(commands=['Меню'])
 # async def pizza_open_command(message: types.Message):
 #     for ret in cur.execute('SELECT * FROM menu').fetchall():
 #         await bot.send_photo(message.from_user.id, ret[0], f"{ret[1]}\nОписание: {ret[2]}\nЦена {ret[-1]}")
 
-def register_handlers_client(dp: Dispatcher):  # функция регистрация команд если мы разделяем на файлы
+def register_handlers_client(dp: Dispatcher):
     dp.register_message_handler(command_start, commands=['start', 'help'])
-    dp.register_message_handler(pizza_open_command, commands=['режим_работы'])
-    dp.register_message_handler(pizza_place_command, commands=['расположение'])
-    dp.register_message_handler(pur_zayka, commands=['мур'])
+    dp.register_message_handler(pizza_open_command, lambda message: message.text.lower() == "режим работы 🕐")
+    dp.register_message_handler(pizza_place_command, lambda message: message.text.lower() == "расположение 📍")
+    dp.register_message_handler(pur_zayka, lambda message: message.text.lower() == "мур 😺")
+    dp.register_message_handler(taxi, lambda message: "такси" in message.text.lower())
+
