@@ -1,3 +1,4 @@
+::F:\Python\TGBOT\Pizza-training-bot\bot_run.bat
 @echo off
 
 call %~dp0venv/scripts/activate
