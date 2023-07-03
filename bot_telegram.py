@@ -17,9 +17,6 @@ client.register_handlers_client(dp)  # регистрация хендлеров
 admin.register_handlers_admin(dp)
 other.register_handlers_other(dp)  # хендлеры без команд нужно импортировать последними
 
-executor.start_polling(dp, skip_updates=True,
-                       on_startup=on_startup)  # нужно чтоб не завалило спамом когда он не активный
-
 if __name__ == '__main__':
     executor.start_polling(dp, skip_updates=True,
-                           on_startup=on_startup)
+                           on_startup=on_startup)  # нужно чтоб не завалило спамом когда он не активный

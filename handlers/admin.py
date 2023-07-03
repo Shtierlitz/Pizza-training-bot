@@ -112,7 +112,7 @@ async def delete_item(message: types.Message):
             await bot.send_photo(message.from_user.id, ret[0], f'{ret[1]}\nОписание: {ret[2]}\nЦена: {ret[-1]}')
             await bot.send_message(message.from_user.id, text='^^^', reply_markup=InlineKeyboardMarkup().add(
                 InlineKeyboardButton(f"Удалить {ret[1]}", callback_data=f"del {ret[1]}")))
-            print(ret[1], "удалено")
+
 
 
 # Регистрируем хендлеры
